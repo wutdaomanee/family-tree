@@ -426,13 +426,47 @@ def render_timeline(trees, lang, is_admin, gen_label_word, total_gens, gen_years
 
             by = format_year_short(node.get('birth_date') or '', lang)
             dy = format_year_short(node.get('death_date') or '', lang)
+            bd_raw = node.get('birth_date') or ''
+            dd_raw = node.get('death_date') or ''
+
+            # ── age calculation ───────────────────────────────────────────────
+            age_str = ''
+            try:
+                from datetime import date as _date
+                raw = bd_raw
+                if ':' in raw:
+                    cal, rest = raw.split(':', 1)
+                    raw = '-'.join([str(int(rest.split('-')[0]) - 543)] + rest.split('-')[1:]) if cal == 'BE' else rest
+                if len(raw) >= 4 and raw[:4].isdigit():
+                    birth_year = int(raw[:4])
+                    if dd_raw and dd_raw.upper() not in ('', 'UNKNOWN'):
+                        dd2 = dd_raw
+                        if ':' in dd2:
+                            cal2, rest2 = dd2.split(':', 1)
+                            dd2 = '-'.join([str(int(rest2.split('-')[0]) - 543)] + rest2.split('-')[1:]) if cal2 == 'BE' else rest2
+                        if len(dd2) >= 4 and dd2[:4].isdigit():
+                            age_str = f'({int(dd2[:4]) - birth_year})'
+                    else:
+                        age_str = f'({_date.today().year - birth_year})'
+            except Exception:
+                pass
+
             yr = ''
             if by:
-                yr = f'{by}' + (f'–{dy}' if dy else '')
+                death_part = f'–{dy}' if (dd_raw and dd_raw.upper() not in ('', 'UNKNOWN') and dy) else ''
+                yr = f'{by}{death_part}'
                 if lang == 'th': yr = f'พ.ศ. {yr}'
                 elif lang == 'zh': yr = f'{yr}年'
-            elif (node.get('birth_date') or '').upper() == 'UNKNOWN':
+                if age_str: yr = f'{yr} {age_str}'
+            elif bd_raw.upper() == 'UNKNOWN':
                 yr = t('unknown_date', lang)
+
+            # ── death badge ───────────────────────────────────────────────────
+            death_badge = (f'<span style="position:absolute;top:-5px;right:-5px;background:#c0392b;'
+                           f'color:#fff;font-size:9px;font-weight:700;border-radius:50%;'
+                           f'width:14px;height:14px;display:flex;align-items:center;'
+                           f'justify-content:center;line-height:1">†</span>'
+                           ) if (dd_raw and dd_raw.upper() not in ('', 'UNKNOWN')) else ''
 
             icon = '♂' if node.get('gender') in ('ชาย','Male','男') else (
                    '♀' if node.get('gender') in ('หญิง','Female','女') else '')
@@ -445,8 +479,9 @@ def render_timeline(trees, lang, is_admin, gen_label_word, total_gens, gen_years
                         f'✏ {t("btn_edit",lang)}</a>') if is_admin else ''
 
             # Main card
-            main = (f'<div class="tl-member-card" style="border-color:{bg};background:{bg};color:{fg}"'
+            main = (f'<div class="tl-member-card" style="position:relative;border-color:{bg};background:{bg};color:{fg}"'
                     f' onclick="location.href=\'{href}\'">'
+                    f'{death_badge}'
                     f'<div class="tl-member-name">{icon} {name}</div>'
                     f'{alt}'
                     f'{"<div class=tl-member-nick>("+nick+")</div>" if nick else ""}'
@@ -461,15 +496,40 @@ def render_timeline(trees, lang, is_admin, gen_label_word, total_gens, gen_years
                     sp_name = f"{sp_dn['first_name']} {sp_dn['last_name']}"
                     sp_by = format_year_short(sp.get('birth_date') or '', lang)
                     sp_dy = format_year_short(sp.get('death_date') or '', lang)
+                    sp_bd_raw = sp.get('birth_date') or ''
+                    sp_dd_raw = sp.get('death_date') or ''
+                    sp_age = ''
+                    try:
+                        from datetime import date as _date
+                        rr = sp_bd_raw
+                        if ':' in rr:
+                            cc, rr2 = rr.split(':', 1)
+                            rr = '-'.join([str(int(rr2.split('-')[0])-(543 if cc=='BE' else 0))]+rr2.split('-')[1:])
+                        if len(rr)>=4 and rr[:4].isdigit():
+                            by2 = int(rr[:4])
+                            if sp_dd_raw and sp_dd_raw.upper() not in ('','UNKNOWN'):
+                                dd3 = sp_dd_raw
+                                if ':' in dd3:
+                                    cc3,rr3 = dd3.split(':',1)
+                                    dd3 = '-'.join([str(int(rr3.split('-')[0])-(543 if cc3=='BE' else 0))]+rr3.split('-')[1:])
+                                if len(dd3)>=4 and dd3[:4].isdigit(): sp_age=f'({int(dd3[:4])-by2})'
+                            else: sp_age=f'({_date.today().year-by2})'
+                    except Exception: pass
                     sp_yr = ''
                     if sp_by:
-                        sp_yr = sp_by + (f'–{sp_dy}' if sp_dy else '')
+                        sp_dp = f'–{sp_dy}' if (sp_dd_raw and sp_dd_raw.upper() not in ('','UNKNOWN') and sp_dy) else ''
+                        sp_yr = f'{sp_by}{sp_dp}'
                         if lang == 'th': sp_yr = f'พ.ศ. {sp_yr}'
                         elif lang == 'zh': sp_yr = f'{sp_yr}年'
+                        if sp_age: sp_yr = f'{sp_yr} {sp_age}'
+                    sp_death_badge = (f'<span style="position:absolute;top:-5px;right:-5px;background:#c0392b;color:#fff;font-size:9px;font-weight:700;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center;line-height:1">†</span>') if (sp_dd_raw and sp_dd_raw.upper() not in ('','UNKNOWN')) else ''
+                    sp_nick = get_display_name(sp, lang).get('nickname', '') or ''
                     sp_href = f'/members/view?id={sp["id"]}'
-                    sp_card = (f'<div class="tl-member-card" style="border-color:{bg};background:{bg};color:{fg};min-width:100px"'
+                    sp_card = (f'<div class="tl-member-card" style="position:relative;border-color:{bg};background:{bg};color:{fg};min-width:100px"'
                                f' onclick="location.href=\'{sp_href}\'">'
+                               f'{sp_death_badge}'
                                f'<div class="tl-member-name">{sp_name}</div>'
+                               f'{"<div class=tl-member-nick>("+sp_nick+")</div>" if sp_nick else ""}'
                                f'{"<div class=tl-member-year>"+sp_yr+"</div>" if sp_yr else ""}'
                                f'</div>')
                     spouse_cards.append(sp_card)
@@ -744,3 +804,4 @@ document.addEventListener('DOMContentLoaded', function() {
             + legend
             + panels_html
             + js)
+
