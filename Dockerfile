@@ -2,7 +2,6 @@
 FROM python:3.11-slim AS builder
 
 WORKDIR /app
-
 COPY requirements.txt .
 RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
@@ -12,25 +11,20 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Copy installed packages from builder
 COPY --from=builder /install /usr/local
-
-# Copy application source
 COPY *.py ./
 
-# Create persistent directories
-RUN mkdir -p /data/photos
+# Data directory (ephemeral on free tier)
+RUN mkdir -p /app/data/photos
 
-# Runtime environment
 ENV PORT=8888 \
-    DB_PATH=/data/family_tree.db \
-    PHOTO_DIR=/data/photos \
+    DB_PATH=/app/data/family_tree.db \
+    PHOTO_DIR=/app/data/photos \
     PYTHONUNBUFFERED=1
 
 EXPOSE 8888
 
-# Non-root user for security
-RUN useradd -m appuser && chown -R appuser /app /data
+RUN useradd -m appuser && chown -R appuser /app
 USER appuser
 
 CMD ["python", "web_ui.py"]
