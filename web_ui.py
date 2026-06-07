@@ -1,4 +1,4 @@
-"""
+﻿"""
 Family Tree — Web UI
 Run: python web_ui.py  →  http://localhost:8888
 
@@ -842,8 +842,12 @@ class Handler(BaseHTTPRequestHandler):
             (t('field_birthdate',lang),  format_date(m['birth_date'] or '', lang) or '-'),
             (t('field_deathdate',lang),  format_date(m['death_date'] or '', lang) or '-'),
             (t('field_birthplace',lang), m['birth_place'] or '-'),
-            (t('field_occupation',lang), m['occupation'] or '-'),
-            (t('field_notes',lang),      m['notes'] or '-'),
+            (t('field_address',lang),    m['address']     or '-'),
+            (t('field_occupation',lang), m['occupation']  or '-'),
+            (t('field_phone',lang),      m['phone']       or '-'),
+            (t('field_line_id',lang),    m['line_id']     or '-'),
+            (t('field_email',lang),      m['email']       or '-'),
+            (t('field_notes',lang),      m['notes']       or '-'),
         ]
 
         # Multilingual names display
@@ -1130,6 +1134,26 @@ class Handler(BaseHTTPRequestHandler):
           </div>
         </div>
         <div class="field" style="margin-top:14px">
+          <label>{t('field_address',lang)}</label>
+          <textarea name="address" rows="2" placeholder="เช่น 123 ถ.สุขุมวิท กรุงเทพฯ / 123 Sukhumvit Rd, Bangkok">{v('address')}</textarea>
+        </div>
+        <hr class="divider" style="margin-top:18px">
+        <div class="card-title" style="margin:12px 0 10px">📞 {t('field_contact',lang)}</div>
+        <div class="form-grid">
+          <div class="field">
+            <label>{t('field_phone',lang)}</label>
+            <input type="text" name="phone" value="{v('phone')}" placeholder="เช่น 081-234-5678">
+          </div>
+          <div class="field">
+            <label>{t('field_line_id',lang)}</label>
+            <input type="text" name="line_id" value="{v('line_id')}" placeholder="เช่น @familytree">
+          </div>
+        </div>
+        <div class="field" style="margin-top:14px">
+          <label>{t('field_email',lang)}</label>
+          <input type="email" name="email" value="{v('email')}" placeholder="เช่น example@email.com">
+        </div>
+        <div class="field" style="margin-top:14px">
           <label>{t('field_notes',lang)}</label>
           <textarea name="notes" rows="3">{v('notes')}</textarea>
         </div>
@@ -1216,7 +1240,7 @@ class Handler(BaseHTTPRequestHandler):
 
         fields = {k: (data[k].strip() or None)
                   for k in ['first_name','last_name','nickname','gender',
-                            'birth_place','occupation','notes']
+                            'birth_place','address','phone','line_id','email','occupation','notes']
                   if k in data}
         fields['first_name'] = fn
         fields['last_name'] = ln
@@ -1764,3 +1788,4 @@ def run():
 
 if __name__ == "__main__":
     run()
+

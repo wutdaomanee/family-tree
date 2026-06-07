@@ -100,6 +100,18 @@ def init_db():
             CREATE INDEX IF NOT EXISTS idx_mnames_mid ON member_names(member_id);
         """)
 
+        # ── migrate: add new columns if they don't exist yet ──────────────────
+        _add_col_if_missing(conn, 'members', 'address',  'TEXT')
+        _add_col_if_missing(conn, 'members', 'phone',    'TEXT')
+        _add_col_if_missing(conn, 'members', 'line_id',  'TEXT')
+        _add_col_if_missing(conn, 'members', 'email',    'TEXT')
+
+
+def _add_col_if_missing(conn, table: str, col: str, col_type: str):
+    existing = [r[1] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()]
+    if col not in existing:
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
+
 
 # ─── User Management ─────────────────────────────────────────────────────────
 

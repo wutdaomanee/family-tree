@@ -1,4 +1,4 @@
-"""
+﻿"""
 Family Tree — 4 display modes
   1. top-down   : traditional top-down tree with connectors
   2. left-right : horizontal left→right org-chart style
@@ -69,6 +69,7 @@ SHARED_CSS = """
 .ft-alt-name{font-size:10px;opacity:.7;margin-top:1px;font-style:italic}
 .ft-nick{font-size:11px;opacity:.7;margin-top:2px}
 .ft-year{font-size:10px;opacity:.65;margin-top:3px}
+.ft-death-badge{position:absolute;top:-6px;right:-6px;background:#c0392b;color:#fff;font-size:10px;font-weight:700;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;line-height:1;z-index:2}
 .ft-gender{position:absolute;top:-8px;left:50%;transform:translateX(-50%);
            font-size:11px;background:#fff;border:1px solid var(--border,#D5E8DC);
            border-radius:8px;padding:0 5px;line-height:18px;color:#555}
@@ -117,6 +118,7 @@ TD_CSS = """
 """
 
 def _person_card(person, depth, lang, is_admin, view_base="/members/view"):
+    from datetime import date as _date
     gc = f"gen-{min(depth,7)}"
     dn = get_display_name(person, lang)
     name = f"{dn['first_name']} {dn['last_name']}"
@@ -126,19 +128,71 @@ def _person_card(person, depth, lang, is_admin, view_base="/members/view"):
     if lang != 'th' and (dn['first_name'] != person['first_name'] or dn['last_name'] != person['last_name']):
         alt = f'<div class="ft-alt-name">{person["first_name"]} {person["last_name"]}</div>'
 
+    # ── Year / Age line ──────────────────────────────────────────────────────
     by = format_year_short(person.get('birth_date') or '', lang)
     dy = format_year_short(person.get('death_date') or '', lang)
-    bd = person.get('birth_date') or ''
+    bd_raw = person.get('birth_date') or ''
+    dd_raw = person.get('death_date') or ''
+
+    # Calculate age
+    age_str = ''
+    try:
+        # birth_date stored as "BE:YYYY-MM-DD", "CE:YYYY-MM-DD", or plain year
+        raw = bd_raw
+        if ':' in raw:
+            cal, rest = raw.split(':', 1)
+            if cal == 'BE':
+                rest_parts = rest.split('-')
+                rest_parts[0] = str(int(rest_parts[0]) - 543)
+                raw = '-'.join(rest_parts)
+            else:
+                raw = rest
+        if len(raw) >= 4 and raw[:4].isdigit():
+            birth_year = int(raw[:4])
+            today = _date.today()
+            if dd_raw and dd_raw.upper() not in ('', 'UNKNOWN'):
+                # deceased — compute age at death
+                dd2 = dd_raw
+                if ':' in dd2:
+                    cal2, rest2 = dd2.split(':', 1)
+                    if cal2 == 'BE':
+                        p2 = rest2.split('-')
+                        p2[0] = str(int(p2[0]) - 543)
+                        dd2 = '-'.join(p2)
+                    else:
+                        dd2 = rest2
+                if len(dd2) >= 4 and dd2[:4].isdigit():
+                    death_year = int(dd2[:4])
+                    age_str = f'({death_year - birth_year})'
+            else:
+                # still alive
+                age_str = f'({today.year - birth_year})'
+    except Exception:
+        pass
+
     yr = ''
     if by:
-        yr = f'{by}' + (f'–{dy}' if dy else '')
+        if dd_raw and dd_raw.upper() not in ('', 'UNKNOWN'):
+            death_part = f'–{dy}' if dy else ''
+            yr = f'{by}{death_part}'
+        else:
+            yr = f'{by}'
         if lang == 'th': yr = f'พ.ศ. {yr}'
         elif lang == 'zh': yr = f'{yr}年'
-    elif bd.upper() == 'UNKNOWN':
+        if age_str:
+            yr = f'{yr} {age_str}'
+    elif bd_raw.upper() == 'UNKNOWN':
         yr = t('unknown_date', lang)
+
     year_html = f'<div class="ft-year">{yr}</div>' if yr else ''
 
-    # Photo thumbnail — show if available, else fall back to gender icon
+    # ── Death badge (shown only if deceased) ─────────────────────────────────
+    death_badge = ''
+    if dd_raw and dd_raw.upper() not in ('', 'UNKNOWN'):
+        death_label = {'th': '†', 'en': '†', 'zh': '†'}.get(lang, '†')
+        death_badge = f'<span class="ft-death-badge" title="{t("field_deathdate", lang)}: {dy}">{death_label}</span>'
+
+    # ── Photo / gender icon ───────────────────────────────────────────────────
     photo_path = person.get('photo_path') or ''
     photo_html  = ''
     gender_html = ''
@@ -158,7 +212,7 @@ def _person_card(person, depth, lang, is_admin, view_base="/members/view"):
 
     href = f'{view_base}?id={person["id"]}'
     return (f'<div class="ft-person {gc}" onclick="location.href=\'{href}\'" title="{name}">'
-            f'{gender_html}{photo_html}'
+            f'{death_badge}{gender_html}{photo_html}'
             f'<div class="ft-name">{name}</div>{alt}{nick}{year_html}{edit}</div>')
 
 

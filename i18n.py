@@ -1,4 +1,4 @@
-"""
+﻿"""
 Internationalization (i18n) for Family Tree.
 Supported languages: th (Thai), en (English), zh (Chinese Simplified)
 
@@ -64,6 +64,11 @@ _T = {
     'field_birthdate':  {'th': 'วันเกิด',           'en': 'Date of Birth',  'zh': '出生日期'},
     'field_deathdate':  {'th': 'วันเสียชีวิต',     'en': 'Date of Death',  'zh': '逝世日期'},
     'field_birthplace': {'th': 'ภูมิลำเนา/บ้านเกิด','en':'Birthplace',     'zh': '出生地'},
+    'field_address':    {'th': 'ที่อยู่ปัจจุบัน',    'en': 'Current Address','zh': '现居地址'},
+    'field_phone':      {'th': 'เบอร์โทรศัพท์',      'en': 'Phone',          'zh': '电话'},
+    'field_line_id':    {'th': 'Line ID',             'en': 'Line ID',        'zh': 'Line ID'},
+    'field_email':      {'th': 'อีเมล',               'en': 'Email',          'zh': '电子邮件'},
+    'field_contact':    {'th': 'ข้อมูลติดต่อ',        'en': 'Contact Info',   'zh': '联系方式'},
     'field_occupation': {'th': 'อาชีพ',              'en': 'Occupation',     'zh': '职业'},
     'field_notes':      {'th': 'หมายเหตุ',           'en': 'Notes',          'zh': '备注'},
     'field_names_section': {
