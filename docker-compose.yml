@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  family-tree:
+    build: .
+    container_name: family-tree
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8888}:8888"
+    volumes:
+      - family_data:/data
+    environment:
+      - DB_PATH=/data/family_tree.db
+      - PHOTO_DIR=/data/photos
+      - PORT=8888
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8888/login')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+volumes:
+  family_data:
+    driver: local

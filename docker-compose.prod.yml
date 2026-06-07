@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  family-tree:
+    build: .
+    container_name: family-tree-app
+    restart: unless-stopped
+    expose:
+      - "8888"
+    volumes:
+      - family_data:/data
+    environment:
+      - DB_PATH=/data/family_tree.db
+      - PHOTO_DIR=/data/photos
+      - PORT=8888
+      - NO_BROWSER=1
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:8888/login')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: family-tree-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      family-tree:
+        condition: service_healthy
+
+volumes:
+  family_data:
+    driver: local

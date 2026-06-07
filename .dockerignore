@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pyo
+*.db
+*.xlsx
+*.bat
+photos/
+.env
+deploy.md
+README.md

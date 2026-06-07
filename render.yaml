@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: family-tree
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free          # change to 'starter' for persistent disk
+    envVars:
+      - key: PORT
+        value: 8888
+      - key: NO_BROWSER
+        value: "1"
+      - key: DB_PATH
+        value: /data/family_tree.db
+      - key: PHOTO_DIR
+        value: /data/photos
+    disk:
+      name: family-tree-data
+      mountPath: /data
+      sizeGB: 1
