@@ -1,0 +1,28 @@
+# fly.toml — Family Tree app on Fly.io
+app = "family-tree"
+primary_region = "sin"          # Singapore (ใกล้ไทย)
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  PORT       = "8888"
+  NO_BROWSER = "1"
+  DB_PATH    = "/data/family_tree.db"
+  PHOTO_DIR  = "/data/photos"
+
+[[mounts]]
+  source      = "family_data"   # persistent volume
+  destination = "/data"
+
+[http_service]
+  internal_port        = 8888
+  force_https          = true
+  auto_stop_machines   = true   # หยุดเมื่อไม่มีคนใช้ (ประหยัด)
+  auto_start_machines  = true   # เริ่มอัตโนมัติเมื่อมีคนเข้า
+  min_machines_running = 0
+
+[[vm]]
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1

@@ -14,17 +14,17 @@ WORKDIR /app
 COPY --from=builder /install /usr/local
 COPY *.py ./
 
-# Data directory (ephemeral on free tier)
-RUN mkdir -p /app/data/photos
+# /data will be mounted as a persistent Fly volume
+RUN mkdir -p /data/photos
 
 ENV PORT=8888 \
-    DB_PATH=/app/data/family_tree.db \
-    PHOTO_DIR=/app/data/photos \
+    DB_PATH=/data/family_tree.db \
+    PHOTO_DIR=/data/photos \
     PYTHONUNBUFFERED=1
 
 EXPOSE 8888
 
-RUN useradd -m appuser && chown -R appuser /app
+RUN useradd -m appuser && chown -R appuser /app /data
 USER appuser
 
 CMD ["python", "web_ui.py"]
