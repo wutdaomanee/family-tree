@@ -1,5 +1,5 @@
 # fly.toml — Family Tree app on Fly.io
-app = "family-tree"
+app = "wutdaomanee-family-tree"
 primary_region = "sin"          # Singapore (ใกล้ไทย)
 
 [build]
