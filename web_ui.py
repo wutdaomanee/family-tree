@@ -79,6 +79,59 @@ body.theme-classic {
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
+body.theme-blue {
+  --green:#1565C0; --green-dark:#0D47A1; --green-mid:#1976D2;
+  --green-light:#E3F2FD; --accent:#42A5F5;
+  --border:#BBDEFB; --nav-bg:#0D47A1; --nav-link:#90CAF9;
+  --node-border:#1976D2; --red:#C62828; --yellow:#F57F17;
+  --bg-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%231976D2' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+body.theme-red {
+  --green:#B71C1C; --green-dark:#7F0000; --green-mid:#C62828;
+  --green-light:#FFEBEE; --accent:#EF5350;
+  --border:#FFCDD2; --nav-bg:#7F0000; --nav-link:#FFCDD2;
+  --node-border:#C62828; --red:#B71C1C; --yellow:#E65100;
+  --bg-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23C62828' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+body.theme-gold {
+  --green:#F57F00; --green-dark:#E65100; --green-mid:#FB8C00;
+  --green-light:#FFF8E1; --accent:#FFCA28;
+  --border:#FFE082; --nav-bg:#E65100; --nav-link:#FFE082;
+  --node-border:#FB8C00; --red:#B71C1C; --yellow:#F57F00;
+  --bg-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23FB8C00' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+/* ── Liquid Glass (Modern UI overlay) ─────────────────────────────────────── */
+body.ui-glass .card,
+body.ui-glass .ft-person,
+body.ui-glass .tl-member-card,
+body.ui-glass .cg-card {
+  background: rgba(255,255,255,0.55) !important;
+  backdrop-filter: blur(18px) saturate(180%);
+  -webkit-backdrop-filter: blur(18px) saturate(180%);
+  border: 1px solid rgba(255,255,255,0.7) !important;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.6) !important;
+}
+body.ui-glass .navbar {
+  background: rgba(var(--nav-bg-rgb,13,47,26),0.72) !important;
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+body.ui-glass .btn-primary {
+  background: rgba(var(--green-mid-rgb,64,145,108),0.85);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
+  border: 1px solid rgba(255,255,255,0.3);
+}
+body.ui-glass .ft-person:hover,
+body.ui-glass .tl-member-card:hover {
+  background: rgba(255,255,255,0.75) !important;
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
+  transform: translateY(-3px);
+}
+body.ui-glass {
+  background-attachment: fixed;
+}
 body {
   font-family:'Sarabun',sans-serif;
   background-color:#fff;
@@ -238,21 +291,34 @@ function confirmDelete(msg, url) {
 }
 function closeModal(){document.getElementById('confirm-modal').classList.remove('show')}
 
-// Theme switcher
+// Theme switcher + UI style toggle
 (function(){
   var themes = [
-    {id:'',      label:'ธรรมชาติ', color:'#1A472A'},
-    {id:'ocean', label:'ท้องทะเล', color:'#0D4F6C'},
-    {id:'sunset',label:'พระอาทิตย์ตก', color:'#5D3A1A'},
-    {id:'classic',label:'คลาสสิก', color:'#333'},
+    {id:'',       label:'🌿 ธรรมชาติ',         color:'#1A472A'},
+    {id:'ocean',  label:'🌊 ท้องทะเล',          color:'#0D4F6C'},
+    {id:'sunset', label:'🌅 พระอาทิตย์ตก',       color:'#5D3A1A'},
+    {id:'classic',label:'🖤 คลาสสิก',            color:'#333'},
+    {id:'blue',   label:'🔵 น้ำเงิน',            color:'#0D47A1'},
+    {id:'red',    label:'🔴 แดง',               color:'#7F0000'},
+    {id:'gold',   label:'🟡 ทอง',               color:'#E65100'},
   ];
   function applyTheme(id){
-    document.body.className = id ? 'theme-'+id : '';
+    var glass = document.body.classList.contains('ui-glass');
+    document.body.className = (id ? 'theme-'+id : '') + (glass ? ' ui-glass' : '');
     localStorage.setItem('ft_theme', id);
+  }
+  function toggleGlass(){
+    var glass = !document.body.classList.contains('ui-glass');
+    var theme = localStorage.getItem('ft_theme') || '';
+    document.body.className = (theme ? 'theme-'+theme : '') + (glass ? ' ui-glass' : '');
+    localStorage.setItem('ft_glass', glass ? '1' : '');
+    var btn = document.getElementById('glass-toggle-btn');
+    if (btn) btn.textContent = glass ? '🪟 Glass ON' : '🪟 Glass';
   }
   document.addEventListener('DOMContentLoaded', function(){
     var saved = localStorage.getItem('ft_theme') || '';
-    applyTheme(saved);
+    var glass = localStorage.getItem('ft_glass') === '1';
+    document.body.className = (saved ? 'theme-'+saved : '') + (glass ? ' ui-glass' : '');
     var panel = document.getElementById('theme-panel');
     var btn   = document.getElementById('theme-main-btn');
     if (!panel || !btn) return;
@@ -265,6 +331,17 @@ function closeModal(){document.getElementById('confirm-modal').classList.remove(
       opt.onclick = function(e){ e.stopPropagation(); applyTheme(t.id); panel.classList.remove('open'); };
       panel.appendChild(opt);
     });
+    // Glass toggle button
+    var sep = document.createElement('hr');
+    sep.style = 'border:none;border-top:1px solid var(--border);margin:4px 0';
+    panel.appendChild(sep);
+    var gb = document.createElement('button');
+    gb.id = 'glass-toggle-btn';
+    gb.className = 'theme-option';
+    gb.textContent = glass ? '🪟 Glass ON' : '🪟 Glass';
+    gb.style = 'width:100%;font-size:12px;color:var(--muted)';
+    gb.onclick = function(e){ e.stopPropagation(); toggleGlass(); };
+    panel.appendChild(gb);
   });
 })();
 </script>
@@ -292,14 +369,23 @@ CONFIRM_MODAL = """
 def navbar(user, lang='th'):
     if not user:
         return f'<nav class="navbar"><a class="brand" href="/">🌳 Family Tree</a></nav>'
-    role_badge = (f'<span class="role admin">ADMIN</span>'
-                  if user['role'] == 'admin' else '<span class="role">USER</span>')
-    admin_links = ""
+    role = user['role']
+    if role == "admin":
+        role_badge = "<span class=""role admin"">ADMIN</span>"
+    elif role == "contribute":
+        role_badge = "<span class=""role"" style=""background:#9B59B6"">CONTRIBUTE</span>"
+    else:
+        role_badge = "<span class=""role"">USER</span>"
+    admin_links = ''
     if user['role'] == 'admin':
-        admin_links = f"""
+        admin_links = f'''
           <a href="/users"><span>👥</span> <span class="label">{t('nav_users',lang)}</span></a>
           <a href="/audit"><span>📋</span> <span class="label">{t('nav_audit',lang)}</span></a>
-        """
+        '''
+    elif user['role'] == 'contribute':
+        admin_links = f'''
+          <a href="/members/add"><span>➕</span> <span class="label">{t('nav_add_member',lang)}</span></a>
+        '''
     # Language switcher pills
     pill_parts = []
     for code, info in LANGUAGES.items():
@@ -711,7 +797,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def page_tree(self, qs, user, lang='th'):
         if not (user := auth.require_login(self)): return
-        is_adm = user['role'] == 'admin'
+        is_adm = user['role'] in ('admin','contribute')
         tree_html = render_tree_page(is_adm, lang)
         add_btn = f'<a href="/members/add" class="btn btn-primary">➕ {t("tree_add",lang)}</a>' if is_adm else ""
         body = f"""
@@ -726,7 +812,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def page_members(self, qs, user, lang='th'):
         if not (user := auth.require_login(self)): return
-        is_adm = user['role'] == 'admin'
+        is_adm = user['role'] in ('admin','contribute')
         members = list_members()
 
         rows = ""
@@ -821,7 +907,7 @@ class Handler(BaseHTTPRequestHandler):
         parents   = get_parents(mid)
         spouses   = get_spouses(mid)
         children  = get_children(mid)
-        is_adm = user['role'] == 'admin'
+        is_adm = user['role'] in ('admin','contribute')
         all_names = get_member_names(mid)
         md = dict(m)
         md['_names'] = all_names
@@ -1168,13 +1254,15 @@ class Handler(BaseHTTPRequestHandler):
         {photo_section}"""
 
     def page_member_form(self, qs, user, mode='add', lang='th'):
-        if not (user := auth.require_admin(self)): return
+        if not (user := auth.require_contribute(self)): return
         m = None
         if mode == 'edit':
             mid = int(qs.get('id', 0))
             m = get_member(mid)
             if not m:
                 return self.send_error_page(404, t('err_not_found',lang), user=user, lang=lang)
+            if not auth.can_edit_member(user, m['created_by']):
+                return self.send_error_page(403, user=user, lang=lang)
 
         title = t('page_add_member',lang) if mode == 'add' else f"{t('page_edit_member',lang)}: {m['first_name']} {m['last_name']}"
         action = "/members/add" if mode == 'add' else "/members/edit"
@@ -1198,7 +1286,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_html(layout(title, body, user, lang=lang))
 
     def post_member_form(self, data, user, mode='add', lang='th', files=None):
-        if not (user := auth.require_admin(self)): return
+        if not (user := auth.require_contribute(self)): return
         files = files or {}
         errors = {}
         fn = data.get('first_name', '').strip()
@@ -1264,6 +1352,8 @@ class Handler(BaseHTTPRequestHandler):
         else:
             mid = int(data.get('id', 0))
             old = dict(get_member(mid))
+            if not auth.can_edit_member(user, old.get('created_by')):
+                return self.send_error_page(403, user=user, lang=lang)
             fields['updated_by'] = user['user_id']
             update_member(mid, **{k:v for k,v in fields.items()})
             self._save_lang_names(mid, data)
@@ -1331,7 +1421,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def page_relations(self, qs, user, lang='th'):
         if not (user := auth.require_login(self)): return
-        is_adm = user['role'] == 'admin'
+        is_adm = user['role'] in ('admin','contribute')
 
         with get_conn() as conn:
             rels = conn.execute("""
@@ -1549,12 +1639,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def _user_form_html(self, u=None, errors=None, prefill=None, mode='add', lang='th'):
         errors = errors or {}
-        d = prefill or (dict(u) if u else {})
         v = lambda f: d.get(f) or ''
         err = lambda f: f'<div style="color:var(--red);font-size:12px;margin-top:3px">{errors[f]}</div>' if f in errors else ''
-        sel_role = "".join(f'<option value="{r}" {"selected" if v("role")==r else ""}>{r}</option>'
-                           for r in ['user','admin'])
-
+        sel_role = ''.join(f'<option value="{r}"' + (' selected' if v('role')==r else '') + f'>{r}</option>' for r in ['user','contribute','admin'])
         pw_label = t('user_pw_label_add', lang) if mode == 'add' else t('user_pw_label_edit', lang)
         pw_hint  = t('user_pw_hint_add', lang)  if mode == 'add' else t('user_pw_hint_edit', lang)
         pw_req   = f'<span style="color:var(--red)">*</span>' if mode == 'add' else ''

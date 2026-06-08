@@ -74,6 +74,33 @@ def is_admin(handler) -> bool:
     return user is not None and user["role"] == "admin"
 
 
+def is_admin_or_contribute(user: dict | None) -> bool:
+    return user is not None and user["role"] in ("admin", "contribute")
+
+
+def can_edit_member(user: dict | None, member_created_by) -> bool:
+    """Admin can edit all; contribute can only edit members they created."""
+    if user is None:
+        return False
+    if user["role"] == "admin":
+        return True
+    if user["role"] == "contribute":
+        return member_created_by is not None and int(member_created_by) == int(user["user_id"])
+    return False
+
+
+def require_contribute(handler) -> dict | None:
+    """Return user if admin or contribute, else 403."""
+    user = current_user(handler)
+    if not user:
+        handler.redirect("/login?next=" + handler.path)
+        return None
+    if user["role"] not in ("admin", "contribute"):
+        handler.send_error_page(403)
+        return None
+    return user
+
+
 def require_login(handler) -> dict | None:
     """
     Return current user if logged in.

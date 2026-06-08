@@ -31,7 +31,7 @@ def init_db():
                 username     TEXT NOT NULL UNIQUE,
                 password_hash TEXT NOT NULL,
                 full_name    TEXT NOT NULL,
-                role         TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('admin','user')),
+                role         TEXT NOT NULL DEFAULT 'user' CHECK(role IN ('admin','user','contribute')),
                 is_active    INTEGER NOT NULL DEFAULT 1,
                 last_login   TEXT,
                 created_at   TEXT DEFAULT (datetime('now','localtime')),
