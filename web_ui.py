@@ -1639,6 +1639,7 @@ class Handler(BaseHTTPRequestHandler):
 
     def _user_form_html(self, u=None, errors=None, prefill=None, mode='add', lang='th'):
         errors = errors or {}
+        d = prefill or (dict(u) if u else {})
         v = lambda f: d.get(f) or ''
         err = lambda f: f'<div style="color:var(--red);font-size:12px;margin-top:3px">{errors[f]}</div>' if f in errors else ''
         sel_role = ''.join(f'<option value="{r}"' + (' selected' if v('role')==r else '') + f'>{r}</option>' for r in ['user','contribute','admin'])
