@@ -1121,7 +1121,7 @@ class Handler(BaseHTTPRequestHandler):
         </div>
         <div class="form-grid" style="margin-top:14px">
           {date_field_html('birth_date', birth_stored, label=t('field_birthdate',lang))}
-          {date_field_html('death_date', death_stored, label=t('field_deathdate',lang))}
+          {date_field_html('death_date', death_stored, label=t('field_deathdate',lang), allow_deceased=True)}
         </div>
         <div class="form-grid" style="margin-top:14px">
           <div class="field">

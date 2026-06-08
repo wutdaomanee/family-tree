@@ -90,6 +90,7 @@ _T = {
 
     # ── Dates ─────────────────────────────────────────────────────────────────
     'unknown_date': {'th': 'ไม่พบข้อมูล', 'en': 'Unknown', 'zh': '不详'},
+    'deceased':     {'th': 'เสียชีวิต',     'en': 'Deceased', 'zh': '已故'},
     'date_cal_be':  {'th': 'พ.ศ.',         'en': 'BE',      'zh': 'BE'},
     'date_cal_ce':  {'th': 'ค.ศ.',         'en': 'AD',      'zh': ''},  # zh: just year+年
     'date_cal_unk': {'th': 'ไม่พบข้อมูล',  'en': 'Unknown', 'zh': '不详'},
@@ -323,8 +324,8 @@ def format_date(stored: str, lang: str = 'th') -> str:
     if not stored:
         return ''
     stored = stored.strip()
-    if stored.upper() == 'UNKNOWN':
-        return t('unknown_date', lang)
+    if stored.upper() in ('UNKNOWN','DECEASED'):
+        return t('deceased', lang) if stored.upper()=='DECEASED' else t('unknown_date', lang)
 
     cal = 'BE'
     date_part = stored
@@ -385,7 +386,7 @@ def format_year_only(stored: str, lang: str = 'th') -> str:
     if not stored:
         return ''
     stored = stored.strip()
-    if stored.upper() == 'UNKNOWN':
+    if stored.upper() in ('UNKNOWN','DECEASED'):
         return ''
 
     cal = 'BE'
@@ -409,7 +410,7 @@ def format_year_short(stored: str, lang: str = 'th') -> str:
     if not stored:
         return ''
     stored = stored.strip()
-    if stored.upper() == 'UNKNOWN':
+    if stored.upper() in ('UNKNOWN','DECEASED'):
         return ''
     cal = 'BE'
     date_part = stored

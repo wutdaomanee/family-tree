@@ -1,4 +1,4 @@
-"""
+﻿"""
 Date utilities for Family Tree.
 Storage format: "BE:2500", "BE:2500-06-15", "CE:1957", "CE:1957-01-20", "UNKNOWN"
 Legacy (plain year/date): treated as BE.
@@ -33,7 +33,7 @@ def display_date(stored: str) -> str:
     if not stored:
         return ''
     stored = stored.strip()
-    if stored == 'UNKNOWN':
+    if stored in ('UNKNOWN','DECEASED'):
         return 'ไม่พบข้อมูล'
 
     cal = 'BE'
@@ -81,7 +81,7 @@ def display_year(stored: str, short: bool = False) -> str:
     if not stored:
         return ''
     stored = stored.strip()
-    if stored == 'UNKNOWN':
+    if stored in ('UNKNOWN','DECEASED'):
         return ''
 
     cal = 'BE'
@@ -109,6 +109,8 @@ def form_values(stored: str) -> dict:
     """
     if not stored or stored.strip() == 'UNKNOWN':
         return {'cal': 'UNKNOWN', 'year': '', 'month': '', 'day': ''}
+    if stored.strip() == 'DECEASED':
+        return {'cal': 'DECEASED', 'year': '', 'month': '', 'day': ''}
 
     stored = stored.strip()
     cal = 'BE'
@@ -132,9 +134,11 @@ def form_values(stored: str) -> dict:
 
 
 def date_field_html(field_name: str, stored: str = '',
-                    label: str = 'วันเกิด', required: bool = False) -> str:
+                    label: str = 'วันเกิด', required: bool = False,
+                    allow_deceased: bool = False) -> str:
     """
     Render a date input group: calendar type selector + year + month + day inputs.
+    If allow_deceased=True, adds "เสียชีวิต (ไม่ระบุวัน)" option for death_date field.
     """
     fv = form_values(stored)
     req = '<span style="color:var(--red)">*</span>' if required else ''
@@ -144,9 +148,13 @@ def date_field_html(field_name: str, stored: str = '',
         ('09','กันยายน'),('10','ตุลาคม'),('11','พฤศจิกายน'),('12','ธันวาคม'),
     ]
 
+    cal_choices = [('BE','พ.ศ.'),('CE','ค.ศ.'),('UNKNOWN','ไม่พบข้อมูล')]
+    if allow_deceased:
+        cal_choices.append(('DECEASED','เสียชีวิต (ไม่ระบุวัน)'))
+
     cal_opts = ''.join(
         f'<option value="{v}" {"selected" if fv["cal"]==v else ""}>{lbl}</option>'
-        for v, lbl in [('BE','พ.ศ.'),('CE','ค.ศ.'),('UNKNOWN','ไม่พบข้อมูล')]
+        for v, lbl in cal_choices
     )
     month_opts = '<option value="">-- เดือน --</option>' + ''.join(
         f'<option value="{v}" {"selected" if fv["month"]==v else ""}>{lbl}</option>'
@@ -157,24 +165,25 @@ def date_field_html(field_name: str, stored: str = '',
         for d in range(1, 32)
     )
 
+    hide_sub = fv['cal'] in ('UNKNOWN', 'DECEASED')
     return f"""<div class="field date-field" id="df-{field_name}">
       <label>{label} {req}</label>
       <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
         <select name="{field_name}_cal" class="date-cal-sel" data-target="{field_name}"
-                style="width:130px;flex-shrink:0" onchange="toggleDateFields('{field_name}')">
+                style="width:190px;flex-shrink:0" onchange="toggleDateFields('{field_name}')">
           {cal_opts}
         </select>
         <div class="date-sub-fields" id="dsf-{field_name}"
-             style="display:{'none' if fv['cal']=='UNKNOWN' else 'flex'};gap:6px;flex-wrap:wrap">
+             style="display:{{'none' if hide_sub else 'flex'}};gap:6px;flex-wrap:wrap">
           <input type="text" name="{field_name}_year" value="{fv['year']}"
                  placeholder="ปี เช่น 2500" style="width:110px">
           <select name="{field_name}_month" style="width:130px">{month_opts}</select>
           <select name="{field_name}_day" style="width:90px">{day_opts}</select>
         </div>
         <span class="date-unknown-label" id="dul-{field_name}"
-              style="display:{'inline' if fv['cal']=='UNKNOWN' else 'none'};
+              style="display:{{'inline' if hide_sub else 'none'}};
                      color:var(--muted);font-size:13px;font-style:italic">
-          ไม่พบข้อมูล
+          {{{'ไม่พบข้อมูล' if fv['cal']=='UNKNOWN' else ('เสียชีวิต (ไม่ระบุวัน)' if fv['cal']=='DECEASED' else '')}}}
         </span>
       </div>
       <div class="field-hint" style="font-size:11px">เดือนและวันไม่จำเป็น หากทราบเฉพาะปี</div>
@@ -182,8 +191,15 @@ def date_field_html(field_name: str, stored: str = '',
     <script>
     function toggleDateFields(name) {{
       var cal = document.querySelector('select[name="'+name+'_cal"]').value;
-      document.getElementById('dsf-'+name).style.display = cal === 'UNKNOWN' ? 'none' : 'flex';
-      document.getElementById('dul-'+name).style.display = cal === 'UNKNOWN' ? 'inline' : 'none';
+      var hide = (cal === 'UNKNOWN' || cal === 'DECEASED');
+      document.getElementById('dsf-'+name).style.display = hide ? 'none' : 'flex';
+      var lbl = document.getElementById('dul-'+name);
+      if (hide) {{
+        lbl.textContent = (cal === 'DECEASED') ? 'เสียชีวิต (ไม่ระบุวัน)' : 'ไม่พบข้อมูล';
+        lbl.style.display = 'inline';
+      }} else {{
+        lbl.style.display = 'none';
+      }}
     }}
     </script>"""
 
@@ -198,8 +214,8 @@ def parse_date_from_form(data: dict, field_name: str) -> str | None:
     month = data.get(f'{field_name}_month', '').strip()
     day = data.get(f'{field_name}_day', '').strip()
 
-    if cal == 'UNKNOWN':
-        return 'UNKNOWN'
+    if cal in ('UNKNOWN', 'DECEASED'):
+        return cal
     if not year:
         return None  # not provided
 

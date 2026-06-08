@@ -470,7 +470,6 @@ def render_timeline(trees, lang, is_admin, gen_label_word, total_gens, gen_years
 
             icon = '♂' if node.get('gender') in ('ชาย','Male','男') else (
                    '♀' if node.get('gender') in ('หญิง','Female','女') else '')
-            occ = node.get('occupation', '') or ''
 
             spouses = node.get('spouses', [])
             href = f'/members/view?id={node["id"]}'
@@ -486,7 +485,6 @@ def render_timeline(trees, lang, is_admin, gen_label_word, total_gens, gen_years
                     f'{alt}'
                     f'{"<div class=tl-member-nick>("+nick+")</div>" if nick else ""}'
                     f'{"<div class=tl-member-year>"+yr+"</div>" if yr else ""}'
-                    f'{"<div class=tl-member-occ>"+occ+"</div>" if occ else ""}'
                     f'{edit_btn}</div>')
 
             if spouses:
