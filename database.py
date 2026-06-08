@@ -106,11 +106,48 @@ def init_db():
         _add_col_if_missing(conn, 'members', 'line_id',  'TEXT')
         _add_col_if_missing(conn, 'members', 'email',    'TEXT')
 
+        # ── migrate: expand role CHECK to include 'contribute' ─────────────────
+        _migrate_role_constraint(conn)
+
 
 def _add_col_if_missing(conn, table: str, col: str, col_type: str):
     existing = [r[1] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()]
     if col not in existing:
         conn.execute(f"ALTER TABLE {table} ADD COLUMN {col} {col_type}")
+
+
+def _migrate_role_constraint(conn):
+    """Recreate users table if role CHECK does not include 'contribute'."""
+    sql = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='users'"
+    ).fetchone()
+    if sql and 'contribute' not in sql[0]:
+        conn.executescript("""
+            PRAGMA foreign_keys = OFF;
+
+            CREATE TABLE IF NOT EXISTS users_new (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                username      TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                full_name     TEXT NOT NULL,
+                role          TEXT NOT NULL DEFAULT 'user'
+                                   CHECK(role IN ('admin','user','contribute')),
+                is_active     INTEGER NOT NULL DEFAULT 1,
+                last_login    TEXT,
+                created_at    TEXT DEFAULT (datetime('now','localtime')),
+                created_by    INTEGER REFERENCES users(id)
+            );
+
+            INSERT INTO users_new
+                SELECT id, username, password_hash, full_name, role,
+                       is_active, last_login, created_at, created_by
+                FROM users;
+
+            DROP TABLE users;
+            ALTER TABLE users_new RENAME TO users;
+
+            PRAGMA foreign_keys = ON;
+        """)
 
 
 # ─── User Management ─────────────────────────────────────────────────────────
