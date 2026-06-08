@@ -100,39 +100,108 @@ body.theme-gold {
   --node-border:#FB8C00; --red:#B71C1C; --yellow:#F57F00;
   --bg-pattern: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23FB8C00' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
 }
-/* ── Liquid Glass (Modern UI overlay) ─────────────────────────────────────── */
-body.ui-glass .card,
-body.ui-glass .ft-person,
-body.ui-glass .tl-member-card,
-body.ui-glass .cg-card {
-  background: rgba(255,255,255,0.55) !important;
-  backdrop-filter: blur(18px) saturate(180%);
-  -webkit-backdrop-filter: blur(18px) saturate(180%);
-  border: 1px solid rgba(255,255,255,0.7) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.6) !important;
+/* ── UI Style: Modern ──────────────────────────────────────────────────────── */
+body.ui-modern .navbar {
+  background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 100%);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.18);
 }
-body.ui-glass .navbar {
-  background: rgba(var(--nav-bg-rgb,13,47,26),0.72) !important;
-  backdrop-filter: blur(20px) saturate(200%);
-  -webkit-backdrop-filter: blur(20px) saturate(200%);
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+body.ui-modern .card {
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  border: none;
 }
-body.ui-glass .btn-primary {
-  background: rgba(var(--green-mid-rgb,64,145,108),0.85);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.3);
-  border: 1px solid rgba(255,255,255,0.3);
+body.ui-modern .btn-primary {
+  background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-dark) 100%);
+  border-radius: 24px;
+  padding: 10px 28px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+  border: none;
+  font-weight: 700;
+  letter-spacing: 0.3px;
 }
-body.ui-glass .ft-person:hover,
-body.ui-glass .tl-member-card:hover {
-  background: rgba(255,255,255,0.75) !important;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.8) !important;
+body.ui-modern .btn-gray {
+  border-radius: 24px;
+  padding: 10px 28px;
+}
+body.ui-modern .ft-person {
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  border-width: 2px;
+  transition: transform .18s, box-shadow .18s;
+}
+body.ui-modern .ft-person:hover {
+  transform: translateY(-4px) scale(1.03);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+body.ui-modern .tl-member-card {
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+}
+body.ui-modern table thead th {
+  background: linear-gradient(135deg, var(--green-mid) 0%, var(--green-dark) 100%);
+  color: #fff;
+}
+body.ui-modern input[type=text], body.ui-modern input[type=email],
+body.ui-modern input[type=password], body.ui-modern select, body.ui-modern textarea {
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  transition: border-color .15s, box-shadow .15s;
+}
+body.ui-modern input:focus, body.ui-modern select:focus, body.ui-modern textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb,82,183,136),0.18);
+  outline: none;
+}
+body.ui-modern .page-header {
+  border-bottom: 3px solid var(--green-light);
+  padding-bottom: 16px;
+  margin-bottom: 20px;
+}
+
+/* ── UI Style: Soft ────────────────────────────────────────────────────────── */
+body.ui-soft {
+  background: linear-gradient(160deg, #f0faf4 0%, #ffffff 60%, #fef9f0 100%) fixed;
+  font-family: 'Sarabun', 'Segoe UI', sans-serif;
+}
+body.ui-soft .navbar {
+  background: var(--green-dark);
+  border-bottom: 3px solid var(--accent);
+}
+body.ui-soft .card {
+  border-radius: 20px;
+  border: 1.5px solid var(--border);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+  background: rgba(255,255,255,0.92);
+}
+body.ui-soft .btn-primary {
+  border-radius: 20px;
+  background: var(--green-mid);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.10);
+  font-weight: 600;
+  border: none;
+}
+body.ui-soft .ft-person {
+  border-radius: 18px;
+  border: 2px solid var(--border);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  background: linear-gradient(160deg, #fff 60%, var(--green-light) 100%);
+}
+body.ui-soft .ft-person:hover {
   transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  background: #fff;
 }
-body.ui-glass {
-  background-attachment: fixed;
+body.ui-soft .tl-member-card {
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
-body {
+body.ui-soft input[type=text], body.ui-soft input[type=email],
+body.ui-soft input[type=password], body.ui-soft select, body.ui-soft textarea {
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  background: #fafffe;
+}
+body.ui-soft .page-title { font-weight: 800; letter-spacing: -0.3px; }
   font-family:'Sarabun',sans-serif;
   background-color:#fff;
   background-image: var(--bg-pattern);
@@ -291,57 +360,14 @@ function confirmDelete(msg, url) {
 }
 function closeModal(){document.getElementById('confirm-modal').classList.remove('show')}
 
-// Theme switcher + UI style toggle
+// Restore saved theme + UI style on every page load
 (function(){
-  var themes = [
-    {id:'',       label:'🌿 ธรรมชาติ',         color:'#1A472A'},
-    {id:'ocean',  label:'🌊 ท้องทะเล',          color:'#0D4F6C'},
-    {id:'sunset', label:'🌅 พระอาทิตย์ตก',       color:'#5D3A1A'},
-    {id:'classic',label:'🖤 คลาสสิก',            color:'#333'},
-    {id:'blue',   label:'🔵 น้ำเงิน',            color:'#0D47A1'},
-    {id:'red',    label:'🔴 แดง',               color:'#7F0000'},
-    {id:'gold',   label:'🟡 ทอง',               color:'#E65100'},
-  ];
-  function applyTheme(id){
-    var glass = document.body.classList.contains('ui-glass');
-    document.body.className = (id ? 'theme-'+id : '') + (glass ? ' ui-glass' : '');
-    localStorage.setItem('ft_theme', id);
-  }
-  function toggleGlass(){
-    var glass = !document.body.classList.contains('ui-glass');
-    var theme = localStorage.getItem('ft_theme') || '';
-    document.body.className = (theme ? 'theme-'+theme : '') + (glass ? ' ui-glass' : '');
-    localStorage.setItem('ft_glass', glass ? '1' : '');
-    var btn = document.getElementById('glass-toggle-btn');
-    if (btn) btn.textContent = glass ? '🪟 Glass ON' : '🪟 Glass';
-  }
+  var theme = localStorage.getItem('ft_theme') || '';
+  var ui    = localStorage.getItem('ft_ui')    || '';
+  var cls   = (theme ? 'theme-'+theme : '') + (ui ? ' ui-'+ui : '');
+  if (cls.trim()) document.documentElement.className = cls.trim();
   document.addEventListener('DOMContentLoaded', function(){
-    var saved = localStorage.getItem('ft_theme') || '';
-    var glass = localStorage.getItem('ft_glass') === '1';
-    document.body.className = (saved ? 'theme-'+saved : '') + (glass ? ' ui-glass' : '');
-    var panel = document.getElementById('theme-panel');
-    var btn   = document.getElementById('theme-main-btn');
-    if (!panel || !btn) return;
-    btn.onclick = function(e){ e.stopPropagation(); panel.classList.toggle('open'); };
-    document.addEventListener('click', function(){ panel.classList.remove('open'); });
-    themes.forEach(function(t){
-      var opt = document.createElement('button');
-      opt.className = 'theme-option';
-      opt.innerHTML = '<span class="theme-dot" style="background:'+t.color+'"></span>'+t.label;
-      opt.onclick = function(e){ e.stopPropagation(); applyTheme(t.id); panel.classList.remove('open'); };
-      panel.appendChild(opt);
-    });
-    // Glass toggle button
-    var sep = document.createElement('hr');
-    sep.style = 'border:none;border-top:1px solid var(--border);margin:4px 0';
-    panel.appendChild(sep);
-    var gb = document.createElement('button');
-    gb.id = 'glass-toggle-btn';
-    gb.className = 'theme-option';
-    gb.textContent = glass ? '🪟 Glass ON' : '🪟 Glass';
-    gb.style = 'width:100%;font-size:12px;color:var(--muted)';
-    gb.onclick = function(e){ e.stopPropagation(); toggleGlass(); };
-    panel.appendChild(gb);
+    if (cls.trim()) document.body.className = cls.trim();
   });
 })();
 </script>
@@ -357,11 +383,6 @@ CONFIRM_MODAL = """
       <a id="confirm-btn" href="#" class="btn btn-danger">ลบ</a>
     </div>
   </div>
-</div>
-<div class="theme-switcher">
-  <div class="theme-panel" id="theme-panel"></div>
-  <button class="theme-btn" id="theme-main-btn"
-          style="background:var(--green-dark)" title="เปลี่ยนธีม">🎨</button>
 </div>
 """
 
@@ -412,6 +433,7 @@ def navbar(user, lang='th'):
       <div style="display:flex;align-items:center;gap:4px;margin-right:8px">{lang_pills}</div>
       <div class="user-badge">
         <span>👤 {user['full_name']}</span>{role_badge}
+        <a href="/profile" class="btn btn-gray btn-sm" title="ตั้งค่า">⚙</a>
         <a href="/logout" class="btn btn-gray btn-sm">{t('btn_logout',lang)}</a>
       </div>
     </nav>"""
@@ -579,6 +601,7 @@ class Handler(BaseHTTPRequestHandler):
                 '/users/edit':   lambda: self.page_user_form(qs, user, mode='edit', lang=lang),
                 '/users/toggle': lambda: self.page_user_toggle(qs, user),
                 '/audit':        lambda: self.page_audit(qs, user, lang),
+                '/profile':      lambda: self.page_profile(qs, user, lang),
                 '/login':        lambda: self.page_login(qs, user, lang),
                 '/logout':       lambda: self.page_logout(user),
             }
@@ -619,6 +642,7 @@ class Handler(BaseHTTPRequestHandler):
                 '/users/add':    lambda: self.post_user_form(data, user, mode='add', lang=lang),
                 '/users/edit':   lambda: self.post_user_form(data, user, mode='edit', lang=lang),
                 '/users/change-password': lambda: self.post_change_password(data, user),
+                '/profile/save': lambda: self.post_profile_save(data, user),
             }
             handler = routes.get(path)
             if handler:
@@ -1804,6 +1828,155 @@ class Handler(BaseHTTPRequestHandler):
         self.redirect("/users?msg=updated")
 
     # ── Audit Log ─────────────────────────────────────────────────────────────
+
+
+    # ── Profile / Display Settings ────────────────────────────────────────────
+
+    def page_profile(self, qs, user, lang='th'):
+        if not (user := auth.require_login(self)): return
+
+        msg = qs.get('msg', '')
+        alert = ''
+        if msg == 'saved':
+            alert = {'th':'บันทึกการตั้งค่าแล้ว','en':'Settings saved','zh':'设置已保存'}.get(lang,'Saved')
+
+        themes = [
+            ('',        {'th':'🌿 ธรรมชาติ','en':'🌿 Nature','zh':'🌿 自然'},       '#1A472A'),
+            ('ocean',   {'th':'🌊 ท้องทะเล','en':'🌊 Ocean','zh':'🌊 海洋'},        '#0D4F6C'),
+            ('sunset',  {'th':'🌅 พระอาทิตย์ตก','en':'🌅 Sunset','zh':'🌅 日落'},   '#5D3A1A'),
+            ('classic', {'th':'🖤 คลาสสิก','en':'🖤 Classic','zh':'🖤 经典'},       '#333333'),
+            ('blue',    {'th':'🔵 น้ำเงิน','en':'🔵 Blue','zh':'🔵 蓝色'},          '#0D47A1'),
+            ('red',     {'th':'🔴 แดง','en':'🔴 Red','zh':'🔴 红色'},               '#7F0000'),
+            ('gold',    {'th':'🟡 ทอง','en':'🟡 Gold','zh':'🟡 金色'},              '#E65100'),
+        ]
+        ui_styles = [
+            ('',        {'th':'📋 ค่าเริ่มต้น','en':'📋 Default','zh':'📋 默认'}),
+            ('modern',  {'th':'✨ Modern – gradient, pill buttons, lift cards','en':'✨ Modern – gradient, pill buttons, lift cards','zh':'✨ Modern'}),
+            ('soft',    {'th':'🌸 Soft – rounded, gradient cards, gentle','en':'🌸 Soft – rounded, gradient cards, gentle','zh':'🌸 Soft'}),
+        ]
+
+        theme_cards = ''
+        for tid, labels, color in themes:
+            lbl = labels.get(lang, labels['en'])
+            theme_cards += f'''
+            <label style="cursor:pointer;display:flex;flex-direction:column;align-items:center;
+                          gap:6px;padding:10px;border-radius:12px;border:2px solid var(--border);
+                          min-width:90px;transition:.15s;background:#fff" class="theme-pick-card"
+                   onclick="pickTheme(this,'{tid}')">
+              <span style="display:inline-block;width:32px;height:32px;border-radius:50%;
+                           background:{color};border:3px solid #fff;
+                           box-shadow:0 2px 8px #0002"></span>
+              <span style="font-size:12px;font-weight:600;text-align:center">{lbl}</span>
+              <input type="radio" name="theme" value="{tid}" style="display:none">
+            </label>'''
+
+        ui_cards = ''
+        for uid2, labels in ui_styles:
+            lbl = labels.get(lang, labels['en'])
+            ui_cards += f'''
+            <label style="cursor:pointer;display:flex;flex-direction:column;gap:4px;
+                          padding:12px 16px;border-radius:12px;border:2px solid var(--border);
+                          min-width:180px;flex:1;transition:.15s;background:#fff" class="ui-pick-card"
+                   onclick="pickUI(this,'{uid2}')">
+              <span style="font-size:13px;font-weight:700">{lbl}</span>
+              <input type="radio" name="ui_style" value="{uid2}" style="display:none">
+            </label>'''
+
+        title = {'th':'⚙ ตั้งค่าการแสดงผล','en':'⚙ Display Settings','zh':'⚙ 显示设置'}.get(lang,'⚙ Display Settings')
+        theme_title  = {'th':'🎨 ธีมสี','en':'🎨 Color Theme','zh':'🎨 颜色主题'}.get(lang,'Color Theme')
+        ui_title     = {'th':'🖥 รูปแบบ UI','en':'🖥 UI Style','zh':'🖥 界面风格'}.get(lang,'UI Style')
+        preview_note = {'th':'(ตัวอย่างจะเปลี่ยนทันที — กด บันทึก เพื่อจำค่าไว้)','en':'(Preview updates live — click Save to persist)','zh':'(预览实时更新 — 点击保存以保留)'}.get(lang,'')
+
+        body = f'''
+        <div class="page-header"><div class="page-title">{title}</div></div>
+        <div class="card" style="max-width:860px">
+          <form method="POST" action="/profile/save" id="prefs-form">
+            <div class="card-title">{theme_title}</div>
+            <p style="font-size:12px;color:var(--muted);margin-bottom:12px">{preview_note}</p>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:24px" id="theme-cards">
+              {theme_cards}
+            </div>
+            <hr class="divider">
+            <div class="card-title" style="margin-top:16px">{ui_title}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 24px" id="ui-cards">
+              {ui_cards}
+            </div>
+            <div class="form-footer">
+              <button type="submit" class="btn btn-primary">💾 {t('btn_save',lang)}</button>
+              <a href="javascript:history.back()" class="btn btn-gray">{t('btn_cancel',lang)}</a>
+            </div>
+          </form>
+        </div>
+        <script>
+        var SAVED_THEME = localStorage.getItem('ft_theme') || '';
+        var SAVED_UI    = localStorage.getItem('ft_ui')    || '';
+        function applyPreview(){{
+          var t = document.querySelector('input[name=theme]:checked');
+          var u = document.querySelector('input[name=ui_style]:checked');
+          var tid = t ? t.value : '';
+          var uid = u ? u.value : '';
+          document.body.className = (tid ? 'theme-'+tid : '') + (uid ? ' ui-'+uid : '');
+        }}
+        function pickTheme(card, val){{
+          document.querySelectorAll('.theme-pick-card').forEach(function(c){{
+            c.style.borderColor = 'var(--border)'; c.style.background = '#fff';
+          }});
+          card.style.borderColor = 'var(--accent)';
+          card.style.background  = 'var(--green-light)';
+          card.querySelector('input').checked = true;
+          applyPreview();
+        }}
+        function pickUI(card, val){{
+          document.querySelectorAll('.ui-pick-card').forEach(function(c){{
+            c.style.borderColor = 'var(--border)'; c.style.background = '#fff';
+          }});
+          card.style.borderColor = 'var(--accent)';
+          card.style.background  = 'var(--green-light)';
+          card.querySelector('input').checked = true;
+          applyPreview();
+        }}
+        document.addEventListener('DOMContentLoaded', function(){{
+          // Highlight current saved values
+          document.querySelectorAll('.theme-pick-card').forEach(function(c){{
+            var inp = c.querySelector('input');
+            if (inp.value === SAVED_THEME) {{
+              c.style.borderColor = 'var(--accent)';
+              c.style.background  = 'var(--green-light)';
+              inp.checked = true;
+            }}
+          }});
+          document.querySelectorAll('.ui-pick-card').forEach(function(c){{
+            var inp = c.querySelector('input');
+            if (inp.value === SAVED_UI) {{
+              c.style.borderColor = 'var(--accent)';
+              c.style.background  = 'var(--green-light)';
+              inp.checked = true;
+            }}
+          }});
+        }});
+        </script>'''
+
+        self.send_html(layout(title, body, user,
+                              alert=alert, alert_type='success', lang=lang))
+
+    def post_profile_save(self, data, user):
+        if not (user := auth.require_login(self)): return
+        # Values are saved client-side via localStorage — server just echoes them back
+        # so the JS on the redirect page picks them up from the hidden fields
+        theme = data.get('theme', '')
+        ui    = data.get('ui_style', '')
+        lang  = get_lang_from_request(self)
+        # Inject a tiny script into the redirect that writes to localStorage
+        script = f'''<html><head>
+        <script>
+          localStorage.setItem('ft_theme', {repr(theme)});
+          localStorage.setItem('ft_ui',    {repr(ui)});
+          location.href = '/profile?msg=saved';
+        </script></head><body></body></html>'''
+        self.send_response(200)
+        self.send_header('Content-Type', 'text/html; charset=utf-8')
+        self.end_headers()
+        self.wfile.write(script.encode())
 
     def page_audit(self, qs, user, lang="th"):
         if not (user := auth.require_admin(self)): return
